@@ -4,7 +4,7 @@
 
 var testProjectsRelativePaths = new string[]
 {
-    "./Solana.Unity.Metaplex.Test/Solana.Unity.Metaplex.Test.csproj",
+    "./Solana.Unity.Soar.Test/Solana.Unity.Soar.Test.csproj",
 };
 
 var target = Argument("target", "Pack");
