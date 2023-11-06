@@ -23,7 +23,7 @@ Solana.Unity.Soar is the Unity SDK for integrating with the [Soar](https://githu
 
 Refer to the [documentation](https://docs.magicblock.gg/Open-source%20programs/SOAR) for more information on how to use the SDK.
 
-Most of the code of Solana.Unity.Soar was auto-generated using the Solana.Unity [Anchor tool](https://github.com/magicblock-labs/Solana.Unity.Anchor) from the Soar [IDL](https://solscan.io/account/SoarmxsvnGcQzLGaiue8mVTko7uuEfTY5zwdKKCnQDU#anchorProgramIDL).
+Most of the code of Solana.Unity.Soar was auto-generated using the Solana.Unity [Anchor tool](https://github.com/magicblock-labs/Solana.Unity.Anchor) from the Soar [IDL](https://solscan.io/account/SoarNNzwQHMwcfdkdLc6kvbkoMSxcHy89gTHrjhJYkk#anchorProgramIDL).
 
 ## Features
 

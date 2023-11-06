@@ -1633,7 +1633,7 @@ namespace Solana.Unity.Soar
         public static class SoarProgram
         {
             // Define a constant for the program id
-            public static readonly PublicKey ProgramIdKey = new("SoarmxsvnGcQzLGaiue8mVTko7uuEfTY5zwdKKCnQDU");
+            public static readonly PublicKey ProgramIdKey = new("SoarNNzwQHMwcfdkdLc6kvbkoMSxcHy89gTHrjhJYkk");
             
             public static Solana.Unity.Rpc.Models.TransactionInstruction InitializeGame(InitializeGameAccounts accounts, GameAttributes gameMeta, PublicKey[] gameAuth, PublicKey programId)
             {
