@@ -1639,22 +1639,22 @@ namespace Solana.Unity.Soar
                 return pda;
             }
             
-            public static PublicKey LeaderboardPda(PublicKey game, int id = 0, PublicKey programId = null)
+            public static PublicKey LeaderboardPda(PublicKey game, ulong id = 0, PublicKey programId = null)
             {
                 programId ??= SoarProgram.ProgramIdKey;
                 PublicKey.TryFindProgramAddress(new[]
                 {
-                    SoarSeeds.Leaderboard, game.KeyBytes, BitConverter.GetBytes(id).Reverse().ToArray()
+                    SoarSeeds.Leaderboard, game.KeyBytes, BitConverter.GetBytes(id).ToArray()
                 }, programId, out var pda, out _);
                 return pda;
             }
             
-            public static PublicKey AchievementPda(PublicKey game, int id = 0, PublicKey programId = null)
+            public static PublicKey AchievementPda(PublicKey game, ulong id = 0, PublicKey programId = null)
             {
                 programId ??= SoarProgram.ProgramIdKey;
                 PublicKey.TryFindProgramAddress(new[]
                 {
-                    SoarSeeds.Achievement, game.KeyBytes, BitConverter.GetBytes(id).Reverse().ToArray()
+                    SoarSeeds.Achievement, game.KeyBytes, BitConverter.GetBytes(id).ToArray()
                 }, programId, out var pda, out _);
                 return pda;
             }

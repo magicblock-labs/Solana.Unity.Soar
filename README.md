@@ -21,7 +21,7 @@
 
 Solana.Unity.Soar is the Unity SDK for integrating with the [Soar](https://github.com/magicblock-labs/SOAR) protocol.
 
-Refer to the [documentation](https://docs.magicblock.gg/Open-source%20programs/SOAR) for more information on how to use the SDK.
+Refer to the [documentation](https://solana.unity-sdk.gg/docs/soar) for more information on how to use the SDK.
 
 Most of the code of Solana.Unity.Soar was auto-generated using the Solana.Unity [Anchor tool](https://github.com/magicblock-labs/Solana.Unity.Anchor) from the Soar [IDL](https://solscan.io/account/SoarNNzwQHMwcfdkdLc6kvbkoMSxcHy89gTHrjhJYkk#anchorProgramIDL).
 
@@ -34,66 +34,6 @@ Most of the code of Solana.Unity.Soar was auto-generated using the Solana.Unity 
 - Solana.Unity.Programs
 - Solana.Unity.Rpc
 - Solana.Unity.Wallet
-
-## Examples
-
-Create a player profile on Soar
-
-```csharp
-var tx = new Transaction()
-{
-    FeePayer = Web3.Account,
-    Instructions = new List<TransactionInstruction>(),
-    RecentBlockHash = await Web3.BlockHash()
-};
-
-var accountsInitUser = new InitializeUserAccounts()
-{
-    Payer = Web3.Account,
-    User = userPda,
-    SystemProgram = SystemProgram.ProgramIdKey
-};
-var initUserIx = KamikazeJoeProgram.InitializeUser(accounts: accountsInitUser, _kamikazeJoeProgramId);
-tx.Add(initUserIx);
-await Web3.Wallet.SignAndSendTransaction(tx);
-```
-The following example refer to the Kamikaze Joe example, specifically the claim win [instruction](https://github.com/magicblock-labs/Kamikaze-Joe/blob/main/programs/kamikazejoe/src/instructions/claim_prize_soar.rs#L43), which submit the score trough CPI:
-
-```csharp
-
-var game = (await KamikazeJoeClient.GetGameAsync(_gameInstanceId, Commitment.Confirmed)).ParsedResult;
-var soar = (await KamikazeJoeClient.GetLeaderboardAsync(FindSoarPda())).ParsedResult;
-
-var tx = new Transaction()
-{
-    FeePayer = Web3.Account,
-    Instructions = new List<TransactionInstruction>(),
-    RecentBlockHash = await Web3.BlockHash()
-};
-
-var playerAccount = SoarPda.PlayerPda(game.GameState.WonValue.Winner);
-
-var claimPrizeAccounts = new ClaimPrizeSoarAccounts()
-{
-    Payer = Web3.Account,
-    User = FindUserPda(game.GameState.WonValue.Winner),
-    Receiver = game.GameState.WonValue.Winner,
-    Game = _gameInstanceId,
-    Vault = FindVaultPda(),
-    LeaderboardInfo = FindSoarPda(),
-    SoarGame = soar.Game,
-    SoarLeaderboard = soar.LeaderboardField,
-    SoarPlayerAccount = playerAccount,
-    SoarPlayerScores = SoarPda.PlayerScoresPda(playerAccount, soar.LeaderboardField),
-    SoarTopEntries = soar.TopEntries,
-    SoarProgram = SoarProgram.ProgramIdKey,
-    SystemProgram = SystemProgram.ProgramIdKey
-};
-
-var claimPrizeIx = KamikazeJoeProgram.ClaimPrizeSoar(accounts: claimPrizeAccounts, _kamikazeJoeProgramId);
-tx.Instructions.Add(claimPrizeIx);
-await SignAndSendTransaction(tx);
-```
 
 ## Contribution
 
