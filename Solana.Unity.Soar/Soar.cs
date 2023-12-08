@@ -1628,6 +1628,56 @@ namespace Solana.Unity.Soar
                 }, programId, out var pda, out _);
                 return pda;
             }
+            
+            public static PublicKey LeaderboardTopEntriesPda(PublicKey leaderboard, PublicKey programId = null)
+            {
+                programId ??= SoarProgram.ProgramIdKey;
+                PublicKey.TryFindProgramAddress(new[]
+                {
+                    SoarSeeds.LeaderTopEntries, leaderboard.KeyBytes
+                }, programId, out var pda, out _);
+                return pda;
+            }
+            
+            public static PublicKey LeaderboardPda(PublicKey game, int id = 0, PublicKey programId = null)
+            {
+                programId ??= SoarProgram.ProgramIdKey;
+                PublicKey.TryFindProgramAddress(new[]
+                {
+                    SoarSeeds.Leaderboard, game.KeyBytes, BitConverter.GetBytes(id).Reverse().ToArray()
+                }, programId, out var pda, out _);
+                return pda;
+            }
+            
+            public static PublicKey AchievementPda(PublicKey game, int id = 0, PublicKey programId = null)
+            {
+                programId ??= SoarProgram.ProgramIdKey;
+                PublicKey.TryFindProgramAddress(new[]
+                {
+                    SoarSeeds.Achievement, game.KeyBytes, BitConverter.GetBytes(id).Reverse().ToArray()
+                }, programId, out var pda, out _);
+                return pda;
+            }
+            
+            public static PublicKey PlayerAchievementPda(PublicKey user, PublicKey achievement, PublicKey programId = null)
+            {
+                programId ??= SoarProgram.ProgramIdKey;
+                PublicKey.TryFindProgramAddress(new[]
+                {
+                    SoarSeeds.PlayerAchievement, user.KeyBytes, achievement.KeyBytes
+                }, programId, out var pda, out _);
+                return pda;
+            }
+            
+            public static PublicKey NftClaimPda(PublicKey reward, PublicKey mint, PublicKey programId = null)
+            {
+                programId ??= SoarProgram.ProgramIdKey;
+                PublicKey.TryFindProgramAddress(new[]
+                {
+                    SoarSeeds.NftClaim, reward.KeyBytes, mint.KeyBytes
+                }, programId, out var pda, out _);
+                return pda;
+            }
         }
 
         public static class SoarProgram

@@ -22,6 +22,21 @@ namespace Solana.Unity.Soar.Test
             
             var playerScoresPda = SoarPda.PlayerScoresPda(new Account().PublicKey, new Account().PublicKey);
             Assert.IsNotNull(playerScoresPda);
+            
+            var leaderboardTopEntriesPda = SoarPda.LeaderboardTopEntriesPda(new Account().PublicKey, new Account().PublicKey);
+            Assert.IsNotNull(leaderboardTopEntriesPda);
+            
+            var leaderboardPda = SoarPda.LeaderboardPda(new Account().PublicKey);
+            Assert.IsNotNull(leaderboardPda);
+            
+            var achievementPda = SoarPda.AchievementPda(new Account().PublicKey);
+            Assert.IsNotNull(achievementPda);
+            
+            var playerAchievementPda = SoarPda.PlayerAchievementPda(new Account().PublicKey, new Account().PublicKey);
+            Assert.IsNotNull(playerAchievementPda);
+            
+            var nftClaimPda = SoarPda.NftClaimPda(new Account().PublicKey, new Account().PublicKey);
+            Assert.IsNotNull(nftClaimPda);
         }
         
         [TestMethod]
