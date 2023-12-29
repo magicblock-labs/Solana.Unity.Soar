@@ -131,6 +131,8 @@ namespace Solana.Unity.Soar
 
             public PublicKey TopEntries { get; set; }
 
+            public bool AllowMultipleScores { get; set; }
+
             public static LeaderBoard Deserialize(ReadOnlySpan<byte> _data)
             {
                 int offset = 0;
@@ -162,6 +164,8 @@ namespace Solana.Unity.Soar
                     offset += 32;
                 }
 
+                result.AllowMultipleScores = _data.GetBool(offset);
+                offset += 1;
                 return result;
             }
         }
@@ -567,7 +571,9 @@ namespace Solana.Unity.Soar
 
             public byte ScoresToRetain { get; set; }
 
-            public bool ScoresOrder { get; set; }
+            public bool IsAscending { get; set; }
+
+            public bool AllowMultipleScores { get; set; }
 
             public int Serialize(byte[] _data, int initialOffset)
             {
@@ -616,7 +622,9 @@ namespace Solana.Unity.Soar
 
                 _data.WriteU8(ScoresToRetain, offset);
                 offset += 1;
-                _data.WriteBool(ScoresOrder, offset);
+                _data.WriteBool(IsAscending, offset);
+                offset += 1;
+                _data.WriteBool(AllowMultipleScores, offset);
                 offset += 1;
                 return offset - initialOffset;
             }
@@ -649,7 +657,9 @@ namespace Solana.Unity.Soar
 
                 result.ScoresToRetain = _data.GetU8(offset);
                 offset += 1;
-                result.ScoresOrder = _data.GetBool(offset);
+                result.IsAscending = _data.GetBool(offset);
+                offset += 1;
+                result.AllowMultipleScores = _data.GetBool(offset);
                 offset += 1;
                 return offset - initialOffset;
             }
@@ -1358,6 +1368,8 @@ namespace Solana.Unity.Soar
             public PublicKey Game { get; set; }
 
             public PublicKey Leaderboard { get; set; }
+
+            public PublicKey TopEntries { get; set; }
         }
 
         public class InitializePlayerAccounts
@@ -1831,10 +1843,10 @@ namespace Solana.Unity.Soar
                 return new Solana.Unity.Rpc.Models.TransactionInstruction{Keys = keys, ProgramId = programId.KeyBytes, Data = resultData};
             }
 
-            public static Solana.Unity.Rpc.Models.TransactionInstruction UpdateLeaderboard(UpdateLeaderboardAccounts accounts, string newDescription, PublicKey newNftMeta, PublicKey programId)
+            public static Solana.Unity.Rpc.Models.TransactionInstruction UpdateLeaderboard(UpdateLeaderboardAccounts accounts, string newDescription, PublicKey newNftMeta, ulong? newMinScore, ulong? newMaxScore, bool? newIsAscending, bool? newAllowMultipleScores, PublicKey programId)
             {
                 List<Solana.Unity.Rpc.Models.AccountMeta> keys = new()
-                {Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.Authority, true), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.Game, false), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.Leaderboard, false)};
+                {Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.Authority, true), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.Game, false), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.Leaderboard, false), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.TopEntries == null ? programId : accounts.TopEntries, false)};
                 byte[] _data = new byte[1200];
                 int offset = 0;
                 _data.WriteU64(2519656746723991368UL, offset);
@@ -1857,6 +1869,58 @@ namespace Solana.Unity.Soar
                     offset += 1;
                     _data.WritePubKey(newNftMeta, offset);
                     offset += 32;
+                }
+                else
+                {
+                    _data.WriteU8(0, offset);
+                    offset += 1;
+                }
+
+                if (newMinScore != null)
+                {
+                    _data.WriteU8(1, offset);
+                    offset += 1;
+                    _data.WriteU64(newMinScore.Value, offset);
+                    offset += 8;
+                }
+                else
+                {
+                    _data.WriteU8(0, offset);
+                    offset += 1;
+                }
+
+                if (newMaxScore != null)
+                {
+                    _data.WriteU8(1, offset);
+                    offset += 1;
+                    _data.WriteU64(newMaxScore.Value, offset);
+                    offset += 8;
+                }
+                else
+                {
+                    _data.WriteU8(0, offset);
+                    offset += 1;
+                }
+
+                if (newIsAscending != null)
+                {
+                    _data.WriteU8(1, offset);
+                    offset += 1;
+                    _data.WriteBool(newIsAscending.Value, offset);
+                    offset += 1;
+                }
+                else
+                {
+                    _data.WriteU8(0, offset);
+                    offset += 1;
+                }
+
+                if (newAllowMultipleScores != null)
+                {
+                    _data.WriteU8(1, offset);
+                    offset += 1;
+                    _data.WriteBool(newAllowMultipleScores.Value, offset);
+                    offset += 1;
                 }
                 else
                 {

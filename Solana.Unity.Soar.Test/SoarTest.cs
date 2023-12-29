@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Solana.Unity.Programs;
 using Solana.Unity.Rpc.Models;
 using Solana.Unity.Soar.Program;
+using Solana.Unity.Soar.Types;
 using Solana.Unity.Wallet;
 using System.Collections.Generic;
 
@@ -65,6 +66,49 @@ namespace Solana.Unity.Soar.Test
                 SoarProgram.ProgramIdKey
             );
             tx.Add(initPlayerIx);
+            
+            Assert.IsNotNull(tx);
+            Assert.IsTrue(tx.Instructions.Count ==  1);
+        }
+        
+        [TestMethod]
+        public void CreateLeaderboardTxBuilder()
+        {
+            var user = new Account();
+            var tx = new Transaction()
+            {
+                FeePayer = user,
+                Instructions = new List<TransactionInstruction>(),
+            };
+            var game = new PublicKey("EFf4gsG44gaWUMd6HsEW7pvcRXXGfLxBC5mMeQD4RGDU");
+
+
+            var leaderboard = SoarPda.LeaderboardPda(game, 0);
+            var topEntries = SoarPda.LeaderboardTopEntriesPda(leaderboard);
+            var leaderboardMeta = new RegisterLeaderBoardInput()
+            {
+                Description = "A new leaderboard",
+                NftMeta = new PublicKey("8PyfKjB46ih1NHdNQLGhEGRDNRPTnFf94bwnQxa9Veux"),
+                ScoresToRetain = 5,
+                IsAscending = false, // From highest to lowest
+                AllowMultipleScores = false // Only one score per player in the global leaderboard
+            };
+
+            var addLeaderboardAccounts = new AddLeaderboardAccounts()
+            {
+                Authority = user,
+                Payer = user,
+                Game = game,
+                Leaderboard = leaderboard,
+                TopEntries = topEntries,
+                SystemProgram = SystemProgram.ProgramIdKey
+            };
+            var createLeaderboardIx = SoarProgram.AddLeaderboard(
+                accounts: addLeaderboardAccounts,
+                input: leaderboardMeta,
+                SoarProgram.ProgramIdKey
+            );
+            tx.Add(createLeaderboardIx);
             
             Assert.IsNotNull(tx);
             Assert.IsTrue(tx.Instructions.Count ==  1);
